@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sai's Worklog Calendar</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='24' fill='%232f6f4f'/%3E%3Cpath d='M28 52 L44 68 L74 32' stroke='white' stroke-width='10' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,500;8..60,600&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- ===== AUTH GATE ===== -->
+  <div id="authGate">
+    <div class="auth-card">
+      <div class="auth-logo">
+        <svg viewBox="0 0 100 100" width="48" height="48" xmlns="http://www.w3.org/2000/svg">
+          <rect width="100" height="100" rx="24" fill="#2f6f4f"/>
+          <path d="M28 52 L44 68 L74 32" stroke="white" stroke-width="10" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <h1 class="auth-title">Sai's Worklog</h1>
+      <p class="auth-sub">Sign in to access your calendar across all your devices.</p>
+      <button id="signInBtn" class="google-btn">
+        <svg width="18" height="18" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+          <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
+          <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
+          <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
+          <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.31-8.16 2.31-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
+        </svg>
+        Continue with Google
+      </button>
+      <p class="auth-note">Your data is private and tied only to your Google account.</p>
+    </div>
+  </div>
+
+  <!-- ===== MAIN APP (hidden until signed in) ===== -->
+  <div id="appRoot" style="display:none;">
+    <div class="app-shell">
+
+      <header class="topbar">
+        <h1 class="title">Sai's <span class="underline">Worklog</span> Calendar</h1>
+        <div class="topbar-right">
+          <div class="clock">
+            <div class="clock-date" id="clockDate"></div>
+            <div class="clock-time" id="clockTime"></div>
+          </div>
+          <div class="user-area">
+            <img id="userAvatar" class="user-avatar" src="" alt="" style="display:none;">
+            <span id="userName" class="user-name"></span>
+            <button id="signOutBtn" class="sign-out-btn">Sign out</button>
+          </div>
+        </div>
+      </header>
+
+      <aside class="panel notes-panel">
+        <div class="panel-header">
+          <span>Notes</span>
+          <button class="panel-add-btn" id="addNoteBtn" title="Add note">+</button>
+        </div>
+        <div class="panel-body" id="notesList"></div>
+      </aside>
+
+      <main class="calendar-panel">
+        <div class="calendar-toolbar">
+          <button class="nav-btn" id="prevBtn">&larr; Prev</button>
+          <span class="month-label" id="monthLabel"></span>
+          <button class="nav-btn" id="nextBtn">Next &rarr;</button>
+          <button class="today-btn" id="todayBtn">Today</button>
+          <span class="month-count" id="monthCount"></span>
+          <span class="sync-status" id="syncStatus"></span>
+        </div>
+        <div class="calendar-grid" id="calendarGrid"></div>
+      </main>
+
+      <aside class="panel due-panel">
+        <div class="panel-header">
+          <span>Overdue</span>
+        </div>
+        <div class="panel-body" id="dueList"></div>
+      </aside>
+
+      <footer class="quote-bar">
+        <span id="quoteText"></span>
+      </footer>
+
+    </div>
+  </div>
+
+  <!-- ===== DAY MODAL ===== -->
+  <div class="day-modal-overlay" id="overlay">
+    <div class="day-modal">
+      <div class="modal-header">
+        <div>
+          <h2 class="modal-title" id="modalTitle"></h2>
+          <div class="modal-subtitle" id="modalSubtitle"></div>
+        </div>
+        <button class="close-btn" id="closeBtn">&times;</button>
+      </div>
+      <ul class="task-list" id="taskList"></ul>
+      <div class="add-task-row">
+        <input type="text" id="taskInput" placeholder="What did you get done?" maxlength="200" />
+        <button class="add-btn" id="addBtn">Add</button>
+      </div>
+      <div class="status" id="saveStatus"></div>
+    </div>
+  </div>
+
+  <!-- Firebase SDK (modular v10 via CDN) -->
+  <script type="module" src="app.js"></script>
+</body>
+</html>
