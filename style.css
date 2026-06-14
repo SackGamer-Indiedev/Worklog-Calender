@@ -1,0 +1,790 @@
+/* ===========================
+   Sai's Worklog Calendar
+   style.css
+   =========================== */
+
+:root {
+  --bg: #ffffff;
+  --bg-soft: #fbfbfa;
+  --sidebar-bg: #f7f7f5;
+  --border: #eceae6;
+  --ink: #37352f;
+  --ink-soft: #9b9a97;
+  --accent: #2f6f4f;
+  --accent-soft: #e6efe9;
+  --overdue: #d9730d;
+  --overdue-soft: #fbecdd;
+  --shadow: 0 8px 28px rgba(15, 15, 15, 0.10);
+  --radius: 10px;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background: var(--bg-soft);
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+}
+
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-thumb { background: #d9d7d2; border-radius: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+
+
+/* ===========================
+   AUTH GATE
+   =========================== */
+
+#authGate {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-soft);
+  padding: 24px;
+}
+
+.auth-card {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 48px 40px;
+  max-width: 380px;
+  width: 100%;
+  text-align: center;
+  box-shadow: var(--shadow);
+}
+
+.auth-logo {
+  margin-bottom: 16px;
+}
+
+.auth-title {
+  font-family: 'Source Serif 4', serif;
+  font-size: 26px;
+  font-weight: 600;
+  margin: 0 0 10px;
+}
+
+.auth-sub {
+  font-size: 14px;
+  color: var(--ink-soft);
+  margin: 0 0 32px;
+  line-height: 1.5;
+}
+
+.google-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  color: var(--ink);
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  padding: 11px 22px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: box-shadow 0.15s, border-color 0.15s;
+  width: 100%;
+  justify-content: center;
+}
+.google-btn:hover {
+  border-color: var(--accent);
+  box-shadow: 0 2px 8px rgba(47,111,79,0.15);
+}
+
+.auth-note {
+  font-size: 11px;
+  color: var(--ink-soft);
+  margin: 20px 0 0;
+}
+
+
+/* ===========================
+   APP SHELL LAYOUT
+   =========================== */
+
+.app-shell {
+  display: grid;
+  grid-template-columns: 230px minmax(0, 1fr) 250px;
+  grid-template-rows: auto 1fr auto;
+  grid-template-areas:
+    "header header header"
+    "notes  calendar due"
+    "footer footer footer";
+  gap: 14px;
+  height: 100vh;
+  padding: 14px;
+}
+
+
+/* ===========================
+   HEADER / TOPBAR
+   =========================== */
+
+.topbar {
+  grid-area: header;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border);
+}
+
+.title {
+  font-family: 'Source Serif 4', serif;
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: 0.2px;
+  margin: 0;
+}
+
+.title .underline {
+  text-decoration: underline;
+  text-decoration-color: var(--accent);
+  text-decoration-thickness: 3px;
+  text-underline-offset: 4px;
+}
+
+.topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.clock {
+  text-align: right;
+  line-height: 1.3;
+}
+
+.clock-date {
+  font-size: 12px;
+  color: var(--ink-soft);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.clock-time {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.user-area {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.user-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+}
+
+.user-name {
+  font-size: 13px;
+  color: var(--ink-soft);
+  max-width: 120px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.sign-out-btn {
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  background: none;
+  border: 1px solid var(--border);
+  color: var(--ink-soft);
+  padding: 4px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: border-color 0.15s, color 0.15s;
+}
+.sign-out-btn:hover {
+  border-color: var(--overdue);
+  color: var(--overdue);
+}
+
+
+/* ===========================
+   SIDE PANELS
+   =========================== */
+
+.panel {
+  background: var(--sidebar-bg);
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.notes-panel { grid-area: notes; }
+.due-panel   { grid-area: due; }
+
+.panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 14px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--ink-soft);
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.panel-add-btn {
+  background: none;
+  border: 1px solid var(--border);
+  color: var(--ink-soft);
+  width: 22px;
+  height: 22px;
+  border-radius: 6px;
+  font-size: 15px;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s, color 0.15s;
+}
+.panel-add-btn:hover {
+  background: var(--accent);
+  color: #fff;
+  border-color: var(--accent);
+}
+
+.panel-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-height: 0;
+}
+
+.panel-empty {
+  color: var(--ink-soft);
+  font-size: 12px;
+  font-style: italic;
+  font-family: 'Source Serif 4', serif;
+  text-align: center;
+  padding: 18px 8px;
+}
+
+
+/* ===========================
+   STICKY NOTES
+   =========================== */
+
+.note-card {
+  border-radius: 8px;
+  padding: 10px 12px;
+  position: relative;
+  box-shadow: 0 1px 3px rgba(15, 15, 15, 0.05);
+  transition: box-shadow 0.15s;
+}
+.note-card:hover {
+  box-shadow: 0 4px 12px rgba(15, 15, 15, 0.08);
+}
+
+.note-text {
+  width: 100%;
+  border: none;
+  background: transparent;
+  resize: none;
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--ink);
+  overflow: hidden;
+  min-height: 22px;
+}
+.note-text:focus { outline: none; }
+.note-text::placeholder { color: rgba(55, 53, 47, 0.35); }
+
+.note-delete {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  background: none;
+  border: none;
+  color: rgba(55, 53, 47, 0.35);
+  cursor: pointer;
+  font-size: 13px;
+  opacity: 0;
+  transition: opacity 0.15s, color 0.15s;
+  padding: 2px 4px;
+}
+.note-card:hover .note-delete { opacity: 1; }
+.note-delete:hover { color: var(--overdue); }
+
+
+/* ===========================
+   OVERDUE PANEL
+   =========================== */
+
+.due-item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 8px 10px;
+  border-radius: 6px;
+  background: var(--overdue-soft);
+  cursor: pointer;
+  transition: transform 0.1s;
+}
+.due-item:hover { transform: translateX(2px); }
+
+.due-item .due-date {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  color: var(--overdue);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-weight: 600;
+}
+
+.due-item .due-text {
+  font-size: 12.5px;
+  line-height: 1.4;
+  word-break: break-word;
+}
+
+
+/* ===========================
+   CALENDAR
+   =========================== */
+
+.calendar-panel {
+  grid-area: calendar;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  background: var(--bg);
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  overflow: hidden;
+}
+
+.calendar-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--border);
+  flex-wrap: wrap;
+  flex-shrink: 0;
+}
+
+.month-label {
+  font-family: 'Source Serif 4', serif;
+  font-size: 17px;
+  font-weight: 600;
+  min-width: 150px;
+}
+
+.nav-btn, .today-btn {
+  font-family: 'Inter', sans-serif;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  color: var(--ink);
+  padding: 5px 11px;
+  cursor: pointer;
+  font-size: 12.5px;
+  border-radius: 6px;
+  transition: background 0.15s, color 0.15s;
+}
+.nav-btn:hover, .today-btn:hover {
+  background: var(--accent);
+  color: #fff;
+  border-color: var(--accent);
+}
+
+.month-count {
+  margin-left: auto;
+  font-size: 12px;
+  color: var(--ink-soft);
+  font-family: 'Source Serif 4', serif;
+  font-style: italic;
+}
+
+.sync-status {
+  font-size: 11px;
+  color: var(--accent);
+  font-family: 'IBM Plex Mono', monospace;
+  min-width: 60px;
+}
+
+.calendar-grid {
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  grid-auto-rows: minmax(80px, 1fr);
+  min-height: 0;
+  overflow-y: auto;
+}
+
+.weekday {
+  text-align: center;
+  font-size: 10.5px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  padding: 8px 4px;
+  border-bottom: 1px solid var(--border);
+  font-weight: 600;
+  position: sticky;
+  top: 0;
+  background: var(--bg);
+  z-index: 1;
+}
+
+.day-cell {
+  border-right: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  padding: 6px 7px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  overflow: hidden;
+  transition: background 0.12s;
+}
+.day-cell:hover { background: var(--bg-soft); }
+.day-cell:nth-child(7n) { border-right: none; }
+
+.day-cell.other-month {
+  background: var(--bg-soft);
+  opacity: 0.42;
+  cursor: default;
+}
+.day-cell.other-month:hover { background: var(--bg-soft); }
+
+.day-number {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12px;
+  font-weight: 600;
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border-radius: 50%;
+}
+
+.day-cell.today .day-number {
+  background: var(--accent);
+  color: #fff;
+}
+
+.cell-tasks {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+  overflow: hidden;
+  min-height: 0;
+}
+
+.cell-task {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  line-height: 1.3;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding: 1px 3px;
+  border-radius: 3px;
+  background: var(--accent-soft);
+  color: var(--ink);
+}
+
+.cell-task.done {
+  color: var(--ink-soft);
+  text-decoration: line-through;
+  background: var(--border);
+}
+
+.cell-task .dot {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--accent);
+  flex-shrink: 0;
+}
+.cell-task.done .dot { background: var(--ink-soft); }
+
+.cell-more {
+  font-size: 10.5px;
+  color: var(--ink-soft);
+  font-family: 'IBM Plex Mono', monospace;
+}
+
+
+/* ===========================
+   QUOTE BAR
+   =========================== */
+
+.quote-bar {
+  grid-area: footer;
+  text-align: center;
+  padding: 10px 14px;
+  border-top: 1px solid var(--border);
+  font-family: 'Source Serif 4', serif;
+  font-style: italic;
+  font-size: 13px;
+  color: var(--ink-soft);
+}
+
+#quoteText {
+  transition: opacity 0.4s ease;
+}
+
+
+/* ===========================
+   DAY MODAL
+   =========================== */
+
+.day-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(55, 53, 47, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  z-index: 50;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s ease, visibility 0.2s ease;
+}
+.day-modal-overlay.open {
+  opacity: 1;
+  visibility: visible;
+}
+
+.day-modal {
+  background: var(--bg);
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+  width: 100%;
+  max-width: 440px;
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  transform: scale(0.95) translateY(10px);
+  opacity: 0;
+  transition: transform 0.25s cubic-bezier(.16, 1, .3, 1), opacity 0.2s ease;
+}
+.day-modal-overlay.open .day-modal {
+  transform: scale(1) translateY(0);
+  opacity: 1;
+}
+
+.modal-header {
+  padding: 18px 20px 14px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-shrink: 0;
+}
+
+.modal-title {
+  font-family: 'Source Serif 4', serif;
+  font-size: 20px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.modal-subtitle {
+  font-size: 11px;
+  color: var(--ink-soft);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-top: 4px;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  color: var(--ink-soft);
+  line-height: 1;
+  padding: 2px 4px;
+}
+.close-btn:hover { color: var(--ink); }
+
+.task-list {
+  list-style: none;
+  margin: 0;
+  padding: 8px 20px;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.task-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+.task-item:last-child { border-bottom: none; }
+
+.task-item input[type="checkbox"] {
+  margin-top: 2px;
+  accent-color: var(--accent);
+  width: 15px;
+  height: 15px;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+
+.task-text {
+  flex: 1;
+  word-break: break-word;
+  line-height: 1.5;
+  cursor: text;
+  padding: 1px 3px;
+  border-radius: 4px;
+}
+.task-text:hover { background: var(--accent-soft); }
+.task-text.done {
+  text-decoration: line-through;
+  color: var(--ink-soft);
+}
+
+.task-edit-input {
+  flex: 1;
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  line-height: 1.5;
+  padding: 1px 3px;
+  border: 1px solid var(--accent);
+  border-radius: 4px;
+  background: var(--bg);
+  color: var(--ink);
+}
+.task-edit-input:focus { outline: none; }
+
+.delete-task {
+  background: none;
+  border: none;
+  color: var(--ink-soft);
+  cursor: pointer;
+  font-size: 15px;
+  padding: 0 2px;
+  flex-shrink: 0;
+}
+.delete-task:hover { color: var(--overdue); }
+
+.empty-state {
+  padding: 24px 0;
+  text-align: center;
+  color: var(--ink-soft);
+  font-size: 13px;
+  font-style: italic;
+  font-family: 'Source Serif 4', serif;
+}
+
+.add-task-row {
+  display: flex;
+  gap: 8px;
+  padding: 14px 20px;
+  border-top: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.add-task-row input {
+  flex: 1;
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  padding: 8px 10px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--bg-soft);
+  color: var(--ink);
+}
+.add-task-row input:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.add-btn {
+  font-family: 'Inter', sans-serif;
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+}
+.add-btn:hover { opacity: 0.88; }
+
+.status {
+  font-size: 11px;
+  color: var(--ink-soft);
+  text-align: center;
+  padding-bottom: 8px;
+  flex-shrink: 0;
+}
+
+
+/* ===========================
+   RESPONSIVE
+   =========================== */
+
+@media (max-width: 1100px) {
+  .app-shell {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto auto auto auto;
+    grid-template-areas:
+      "header"
+      "calendar"
+      "notes"
+      "due"
+      "footer";
+    height: auto;
+    min-height: 100vh;
+  }
+  .calendar-grid { min-height: 480px; }
+  .panel { max-height: 220px; }
+}
+
+@media (max-width: 600px) {
+  .title { font-size: 17px; }
+  .clock-time { font-size: 15px; }
+  .cell-task { font-size: 10px; }
+  .day-cell { padding: 4px 5px; }
+  .topbar-right { gap: 10px; }
+  .user-name { display: none; }
+}
